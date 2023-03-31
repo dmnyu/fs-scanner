@@ -31,7 +31,9 @@ func contains(ext string) bool {
 var tikaServer *tika.Server
 var tikaClient *tika.Client
 
-func init() {
+func main() {
+	root := os.Args[1]
+
 	var err error
 	tikaServer, err = tika.NewServer("tika-server-1.28.5.jar", "")
 	if err != nil {
@@ -45,12 +47,7 @@ func init() {
 
 	tikaClient = tika.NewClient(nil, tikaServer.URL())
 
-}
-
-func main() {
-	root := os.Args[1]
-
-	err := filepath.Walk(root, func(path string, info fs.FileInfo, err error) error {
+	err = filepath.Walk(root, func(path string, info fs.FileInfo, err error) error {
 		if !info.IsDir() {
 			ext := strings.ToLower(filepath.Ext(info.Name()))
 			if contains(ext) {
